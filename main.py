@@ -1,4 +1,4 @@
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
 import requests
 import os
 
@@ -9,7 +9,8 @@ HEADERS = {"authorization": f"Bearer {TOKEN}"}
 
 @app.route('/quote/<isin>')
 def get_quote(isin):
-    url = f"https://grafici.borsaitaliana.it/api/instruments/{isin},XMIL,ISIN/intraday?resolution=1MN"
+    mic = request.args.get("mic", "XMIL")
+    url = f"https://grafici.borsaitaliana.it/api/instruments/{isin},{mic},ISIN/intraday?resolution=1MN"
     r = requests.get(url, headers=HEADERS, timeout=10)
     data = r.json()
     points = data.get("intradayPoint", [])
