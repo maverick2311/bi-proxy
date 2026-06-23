@@ -16,10 +16,12 @@ def get_quote(isin):
     points = data.get("intradayPoint", [])
     if not points:
         return jsonify({"error": "no data"}), 404
-    p = points[0]
+    last = points[-1]
+    date = last["time"].split("-")[0]
+    close = last["endPx"]
     return jsonify([{
-        "date": p["previousClosingDt"],
-        "close": p["previousClosingPx"]
+        "date": date,
+        "close": close
     }])
 
 if __name__ == "__main__":
